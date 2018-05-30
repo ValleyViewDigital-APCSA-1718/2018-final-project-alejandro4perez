@@ -1,0 +1,53 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, and Greenfoot)
+
+/**
+ * Alejandro Perez
+ * Period 
+ */
+public class Laser extends SmoothMover
+{
+    /** The damage this laser will deal */
+    private static final int damage = 16;
+    
+    /** A laser looses one life each act, and will disappear when life = 0 */
+    private int life = 30;
+    
+    public Laser()
+    {
+    }
+    
+    public Laser(Vector speed, int rotation)
+    {
+        super(speed);
+        setRotation(rotation);
+        addForce(new Vector(rotation, 15));
+        Greenfoot.playSound("EnergyGun.wav");
+    }
+    
+    /**
+     * The laser will damage apples if it hits them.
+     */
+    public void act()
+    {
+        if(life <= 0) {
+            getWorld().removeObject(this);
+        } 
+        else {
+            life--;
+            move();
+            checkAppleHit();
+        }
+    }
+    
+    /**
+     * Check whether we have hit an apple.
+     */
+    private void checkAppleHit()
+    {
+        Apple apple = (Apple) getOneIntersectingObject(Apple.class);
+        if (apple != null){
+            getWorld().removeObject(this);
+            apple.hit(damage);
+        }
+    }
+}
